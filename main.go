@@ -39,6 +39,13 @@ func listenHotkeys() {
 		panic(err)
 	}
 
+	var dump []byte
+	go func() {
+		for msg := range peer.ReadChan {
+			dump = msg
+		}
+	}()
+
 	for {
 		select {
 		case <-hkDump.Keydown():
@@ -46,7 +53,9 @@ func listenHotkeys() {
 			peer.WriteChan <- clipboard.Read(clipboard.FmtText)
 		case <-hkLoad.Keydown():
 			log.Printf("hotkey: %v is down\n", hkLoad)
-			clipboard.Write(clipboard.FmtText, <-peer.ReadChan)
+			if dump != nil {
+				clipboard.Write(clipboard.FmtText, dump)
+			}
 		}
 	}
 }
