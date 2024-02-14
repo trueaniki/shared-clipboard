@@ -3,9 +3,14 @@ package main
 import (
 	"log"
 
+	"github.com/trueaniki/gopeers"
 	"golang.design/x/clipboard"
 	"golang.design/x/hotkey"
 	"golang.design/x/hotkey/mainthread"
+)
+
+var (
+	peer *gopeers.Peer
 )
 
 func main() {
@@ -13,6 +18,10 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	locals := gopeers.PingSweep("192.168.100.0/24")
+	peer = gopeers.NewPeer(locals)
+	peer.Start()
+
 	mainthread.Init(listenHotkeys)
 }
 
@@ -34,20 +43,10 @@ func listenHotkeys() {
 		select {
 		case <-hkDump.Keydown():
 			log.Printf("hotkey: %v is down\n", hkDump)
-			dumpClipboard()
+			peer.WriteChan <- clipboard.Read(clipboard.FmtText)
 		case <-hkLoad.Keydown():
 			log.Printf("hotkey: %v is down\n", hkLoad)
-			loadClipboard()
+			clipboard.Write(clipboard.FmtText, <-peer.ReadChan)
 		}
 	}
-}
-
-var cb []byte
-
-func dumpClipboard() {
-	cb = clipboard.Read(clipboard.FmtText)
-}
-
-func loadClipboard() {
-	clipboard.Write(clipboard.FmtText, cb)
 }
