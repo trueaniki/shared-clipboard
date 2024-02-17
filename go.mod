@@ -1,4 +1,4 @@
-module shared-clipboard
+module github.com/trueaniki/shared-clipboard
 
 go 1.19
 
