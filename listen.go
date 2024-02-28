@@ -46,6 +46,6 @@ func listen(peer *gopeers.Peer) func() {
 	}
 }
 
-func Start(peer *gopeers.Peer) {
+func Listen(peer *gopeers.Peer) {
 	mainthread.Init(listen(peer))
 }
