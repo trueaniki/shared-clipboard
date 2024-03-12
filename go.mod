@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/trueaniki/admiral v0.0.1
-	github.com/trueaniki/gopeers v0.0.0-20240226115115-04a8ca5dfe94
+	github.com/trueaniki/gopeers v0.0.1
 	golang.design/x/clipboard v0.7.0
 	golang.design/x/hotkey v0.4.1
 )

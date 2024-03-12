@@ -8,6 +8,8 @@ github.com/trueaniki/go-parse-hotkeys v0.0.1 h1:bEaOO17htPqcJL3ww6vAzZVxD9Uv1G6D
 github.com/trueaniki/go-parse-hotkeys v0.0.1/go.mod h1:Qa/eTI/5J1LEo/L0alCUPD75L47ZoWnfFdE3NESxuQg=
 github.com/trueaniki/gopeers v0.0.0-20240226115115-04a8ca5dfe94 h1:hzB4N+cAw8nEkCDQzC9xWwZGWsTFuNJcnPAmjf9ZPYk=
 github.com/trueaniki/gopeers v0.0.0-20240226115115-04a8ca5dfe94/go.mod h1:lUXks2eGQuwh27s530J42UfYJFJj7yYoqdDWNOi0I9Y=
+github.com/trueaniki/gopeers v0.0.1 h1:hwalLwbsqi2uNpdAGRnh+2DOZLu4xn7JrBh811xN5lA=
+github.com/trueaniki/gopeers v0.0.1/go.mod h1:lUXks2eGQuwh27s530J42UfYJFJj7yYoqdDWNOi0I9Y=
 github.com/yuin/goldmark v1.4.13/go.mod h1:6yULJ656Px+3vBD8DxQVa3kxgyrAnzto9xy5taEt/CY=
 go.uber.org/goleak v1.3.0 h1:2K3zAYmnTNqV73imy9J1T3WC+gmCePx2hEGkimedGto=
 go.uber.org/multierr v1.10.0 h1:S0h4aNzvfcFsC3dRF1jLoaov7oRaKqRGC/pUEJ2yvPQ=
