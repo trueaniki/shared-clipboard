@@ -10,6 +10,7 @@ require (
 )
 
 require (
+	github.com/trueaniki/go-parse-hotkeys v0.0.1 // indirect
 	go.uber.org/multierr v1.10.0 // indirect
 	go.uber.org/zap v1.27.0 // indirect
 	golang.design/x/mainthread v0.3.0 // indirect

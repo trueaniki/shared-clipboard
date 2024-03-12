@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"net"
 	"os"
 	"os/exec"
@@ -11,6 +12,7 @@ import (
 	"github.com/trueaniki/gopeers"
 	sharedclipboard "github.com/trueaniki/shared-clipboard"
 	"golang.design/x/clipboard"
+	"golang.design/x/hotkey"
 )
 
 const appName = "shared-clipboard"
@@ -37,6 +39,11 @@ type Stop struct {
 
 const daemonPort = 17893
 
+var hotkeys *sharedclipboard.Hotkeys = &sharedclipboard.Hotkeys{
+	HKDump: hotkey.New([]hotkey.Modifier{hotkey.ModCtrl, hotkey.ModShift}, hotkey.KeyA),
+	HKLoad: hotkey.New([]hotkey.Modifier{hotkey.ModCtrl, hotkey.ModShift}, hotkey.KeyD),
+}
+
 func main() {
 	conf := &Conf{}
 	a := admiral.New(appName, appDesc)
@@ -46,15 +53,19 @@ func main() {
 		os.Exit(0)
 	})
 
-	a.Command("start").Handle(func(args interface{}) {
-		args = args.(*Start)
+	a.Command("start").Handle(func(opts interface{}) {
+		args := opts.(*Start)
 
-		cmd := exec.Command(os.Args[0], "-n", args.(*Start).Network)
+		cmdArgs := []string{"-n", args.Network}
+		if args.Conf != "" {
+			cmdArgs = append(cmdArgs, "-c", args.Conf)
+		}
+		cmd := exec.Command(os.Args[0], cmdArgs...)
 		cmd.Env = append(os.Environ(), "DAEMON=true")
 		cmd.SysProcAttr = &syscall.SysProcAttr{
 			Setsid: true,
 		}
-		logfile, err := os.OpenFile(args.(*Start).Logfile, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
+		logfile, err := os.OpenFile(args.Logfile, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
 		if err != nil {
 			printAndExit(err)
 		}
@@ -106,6 +117,26 @@ func main() {
 	}
 
 	fmt.Println("Starting shared clipboard daemon")
+
+	if conf.Conf != "" {
+		f, err := os.Open(conf.Conf)
+		if err != nil {
+			printAndExit(err)
+		}
+		defer f.Close()
+		content, err := io.ReadAll(f)
+		if err != nil {
+			printAndExit(err)
+		}
+		hks, err := sharedclipboard.ParseHotkeys(string(content))
+		if err != nil {
+			printAndExit(err)
+		}
+		if hks != nil {
+			hotkeys = hks
+		}
+	}
+
 	start(conf.Network)
 }
 
@@ -124,5 +155,5 @@ func start(network string) {
 	peer := gopeers.NewPeer(locals)
 	peer.Start()
 
-	sharedclipboard.Listen(peer)
+	sharedclipboard.Listen(peer, hotkeys)
 }

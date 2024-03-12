@@ -5,15 +5,14 @@ import (
 
 	"github.com/trueaniki/gopeers"
 	"golang.design/x/clipboard"
-	"golang.design/x/hotkey"
 	"golang.design/x/hotkey/mainthread"
 )
 
-func listen(peer *gopeers.Peer) func() {
-	return func() {
-		hkDump := hotkey.New([]hotkey.Modifier{hotkey.ModCtrl, hotkey.ModShift}, hotkey.KeyA)
-		hkLoad := hotkey.New([]hotkey.Modifier{hotkey.ModCtrl, hotkey.ModShift}, hotkey.KeyD)
+func listen(peer *gopeers.Peer, hk *Hotkeys) func() {
+	hkDump := hk.HKDump
+	hkLoad := hk.HKLoad
 
+	return func() {
 		err := hkDump.Register()
 		if err != nil {
 			panic(err)
@@ -46,6 +45,6 @@ func listen(peer *gopeers.Peer) func() {
 	}
 }
 
-func Listen(peer *gopeers.Peer) {
-	mainthread.Init(listen(peer))
+func Listen(peer *gopeers.Peer, hk *Hotkeys) {
+	mainthread.Init(listen(peer, hk))
 }

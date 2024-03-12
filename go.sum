@@ -4,6 +4,8 @@ github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZb
 github.com/stretchr/testify v1.8.1 h1:w7B6lhMri9wdJUVmEZPGGhZzrYTPvgJArz7wNPgYKsk=
 github.com/trueaniki/admiral v0.0.1 h1:M4AKKplA+pQ/SULbxKgDdl+7yJKDJcs8bBZFgQTc/4w=
 github.com/trueaniki/admiral v0.0.1/go.mod h1:ch6eZijSVgCvx2Hae6g/EaXGlLLBzE7Mn03gJqB/vSE=
+github.com/trueaniki/go-parse-hotkeys v0.0.1 h1:bEaOO17htPqcJL3ww6vAzZVxD9Uv1G6DmtX66mP6vFg=
+github.com/trueaniki/go-parse-hotkeys v0.0.1/go.mod h1:Qa/eTI/5J1LEo/L0alCUPD75L47ZoWnfFdE3NESxuQg=
 github.com/trueaniki/gopeers v0.0.0-20240226115115-04a8ca5dfe94 h1:hzB4N+cAw8nEkCDQzC9xWwZGWsTFuNJcnPAmjf9ZPYk=
 github.com/trueaniki/gopeers v0.0.0-20240226115115-04a8ca5dfe94/go.mod h1:lUXks2eGQuwh27s530J42UfYJFJj7yYoqdDWNOi0I9Y=
 github.com/yuin/goldmark v1.4.13/go.mod h1:6yULJ656Px+3vBD8DxQVa3kxgyrAnzto9xy5taEt/CY=
