@@ -11,6 +11,7 @@ import (
 	"github.com/trueaniki/admiral"
 	"github.com/trueaniki/gopeers"
 	sharedclipboard "github.com/trueaniki/shared-clipboard"
+	"go.uber.org/zap"
 	"golang.design/x/clipboard"
 	"golang.design/x/hotkey"
 )
@@ -116,7 +117,7 @@ func main() {
 		}()
 	}
 
-	fmt.Println("Starting shared clipboard daemon")
+	fmt.Println("Starting shared clipboard")
 
 	if conf.Conf != "" {
 		f, err := os.Open(conf.Conf)
@@ -150,10 +151,16 @@ func start(network string) {
 	if err != nil {
 		printAndExit(err)
 	}
-	os.Stdout.WriteString("Clipboard initialized\n")
 	locals := gopeers.PingSweep(network)
-	peer := gopeers.NewPeer(locals)
-	peer.Start()
+	peer := gopeers.NewPeer()
+
+	logger, err := zap.NewProduction()
+	if err != nil {
+		printAndExit(err)
+	}
+	peer.SetLogger(logger)
+	peer.Discover(locals)
+	peer.Listen()
 
 	sharedclipboard.Listen(peer, hotkeys)
 }
