@@ -35,3 +35,17 @@ sharedclipboard start -n 192.168.0.0/24 -c ~/.sharedclipboard.conf
 ```
 
 When writing hotkeys, follow the rules of [github.com/trueaniki/go-parse-hotkeys](https://github.com/trueaniki/go-parse-hotkeys). Separator is `+`.
+
+### Init command
+Use `init` command to generate config file at `~/.shared-clipboard.conf`:
+```sh
+sharedclipboard init
+```
+This will generate file with the following contents:
+```
+# Share=Ctrl+Shift+A
+# Adopt=Ctrl+Shift+D
+```
+You can uncomment the lines and set hotkeys to whatever you want according to [github.com/trueaniki/go-parse-hotkeys](https://github.com/trueaniki/go-parse-hotkeys) using `+` separator.
+
+If you have `~/.shared-clipboard.conf` file set up, no need to pass it exteranlly using `--conf` flag, it will be handled automatically.
