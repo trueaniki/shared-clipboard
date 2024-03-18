@@ -10,11 +10,11 @@ import (
 	"syscall"
 
 	"github.com/trueaniki/admiral"
+	parsehotkeys "github.com/trueaniki/go-parse-hotkeys"
 	"github.com/trueaniki/gopeers"
 	sharedclipboard "github.com/trueaniki/shared-clipboard"
 	"go.uber.org/zap"
 	"golang.design/x/clipboard"
-	"golang.design/x/hotkey"
 )
 
 const appName = "shared-clipboard"
@@ -43,12 +43,19 @@ type Stop struct{}
 
 const daemonPort = 17893
 
-var hotkeys *sharedclipboard.Hotkeys = &sharedclipboard.Hotkeys{
-	HKShare: hotkey.New([]hotkey.Modifier{hotkey.ModCtrl, hotkey.ModShift}, hotkey.KeyA),
-	HKAdopt: hotkey.New([]hotkey.Modifier{hotkey.ModCtrl, hotkey.ModShift}, hotkey.KeyD),
-}
+var defaultShareHk = "Ctrl+Shift+S"
+var defaultAdoptHk = "Ctrl+Shift+A"
+
+var hotkeys *sharedclipboard.Hotkeys
 
 func main() {
+	shareHk, _ := parsehotkeys.Parse(defaultShareHk, "+")
+	adoptHk, _ := parsehotkeys.Parse(defaultAdoptHk, "+")
+	hotkeys = &sharedclipboard.Hotkeys{
+		HKShare: shareHk,
+		HKAdopt: adoptHk,
+	}
+
 	conf := &Conf{}
 	a := admiral.New(appName, appDesc)
 	a.Configure(conf)
@@ -72,7 +79,7 @@ func main() {
 			printAndExit(err)
 		}
 		defer f.Close()
-		_, err = f.WriteString("# Share=Ctrl+Shift+A\n# Adopt=Ctrl+Shift+D\n")
+		_, err = f.WriteString(fmt.Sprintf("# Share=%s\n# Adopt=%s\n", defaultShareHk, defaultAdoptHk))
 		if err != nil {
 			printAndExit(err)
 		}

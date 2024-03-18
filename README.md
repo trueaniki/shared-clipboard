@@ -2,8 +2,8 @@
 A CLI tool to share clipboard between devices in local area network
 
 Start the application on multiple devices sharing the same network.
-Press the combination (by default: `CTRL+SHIFT+A`) to share the clipboard.
-Press the combination (by default: `CTRL+SHIFT+D`) on other device to adopt the clipboard.
+Press the combination (by default: `CTRL+SHIFT+S`) to share the clipboard.
+Press the combination (by default: `CTRL+SHIFT+A`) on other device to adopt the clipboard.
 
 ## Usage
 ```sh
@@ -26,8 +26,8 @@ Will stop the application running in daemon mode.
 ### Configuring hotkeys
 To set custom hotkeys, create a textfile with contents like folowing:
 ```
-Share=ctrl+a
-Adopt=ctrl+b
+Share=ctrl+s
+Adopt=ctrl+a
 ```
 Pass the file path to the application using `--conf` flag:
 ```sh
@@ -43,8 +43,8 @@ sharedclipboard init
 ```
 This will generate file with the following contents:
 ```
-# Share=Ctrl+Shift+A
-# Adopt=Ctrl+Shift+D
+# Share=Ctrl+Shift+S
+# Adopt=Ctrl+Shift+A
 ```
 You can uncomment the lines and set hotkeys to whatever you want according to [github.com/trueaniki/go-parse-hotkeys](https://github.com/trueaniki/go-parse-hotkeys) using `+` separator.
 
