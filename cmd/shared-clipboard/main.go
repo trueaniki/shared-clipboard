@@ -39,8 +39,7 @@ type Start struct {
 	Logfile string `type:"flag" name:"logfile" alias:"l" description:"Path to log file"`
 }
 
-type Stop struct {
-}
+type Stop struct{}
 
 const daemonPort = 17893
 
@@ -53,6 +52,8 @@ func main() {
 	conf := &Conf{}
 	a := admiral.New(appName, appDesc)
 	a.Configure(conf)
+
+	// Handle version flag
 	a.Flag("version").Handle(func(_ any) {
 		fmt.Println(version)
 		os.Exit(0)
@@ -109,6 +110,7 @@ func main() {
 		os.Exit(0)
 	})
 
+	// Handle stop command
 	a.Command("stop").Handle(func(args interface{}) {
 		conn, err := net.Dial("tcp", fmt.Sprintf("127.0.0.1:%d", daemonPort))
 		if err != nil {
@@ -118,11 +120,13 @@ func main() {
 		os.Exit(0)
 	})
 
+	// Parse the command line arguments
 	_, err := a.Parse(os.Args)
 	if err != nil {
 		printAndExit(err)
 	}
 
+	// If DAEMON env is set, start the daemon
 	if os.Getenv("DAEMON") == "true" {
 		go func() {
 			// Listen for stop signal
