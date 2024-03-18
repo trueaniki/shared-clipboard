@@ -6,6 +6,7 @@ import (
 	"net"
 	"os"
 	"os/exec"
+	"path"
 	"syscall"
 
 	"github.com/trueaniki/admiral"
@@ -27,7 +28,10 @@ type Conf struct {
 
 	Start Start `type:"command" name:"start" description:"Start the shared clipboard daemon"`
 	Stop  Stop  `type:"command" name:"stop" description:"Stop the shared clipboard daemon"`
+	Init  Init  `type:"command" name:"init" description:"Initialize the config file at ~/.shared-clipboard.conf"`
 }
+
+type Init struct{}
 
 type Start struct {
 	Network string `type:"flag" name:"network" alias:"n" description:"Network to scan in CIDR format" required:"true"`
@@ -54,6 +58,28 @@ func main() {
 		os.Exit(0)
 	})
 
+	// Handle init command
+	a.Command("init").Handle(func(_ interface{}) {
+		confpath := path.Join(getHomeDir(), ".shared-clipboard.conf")
+		// Check if file exists
+		if _, err := os.Stat(confpath); !os.IsNotExist(err) {
+			fmt.Println("Config file already exists at", confpath)
+			os.Exit(0)
+		}
+		f, err := os.Create(confpath)
+		if err != nil {
+			printAndExit(err)
+		}
+		defer f.Close()
+		_, err = f.WriteString("# Share=Ctrl+Shift+A\n# Adopt=Ctrl+Shift+D\n")
+		if err != nil {
+			printAndExit(err)
+		}
+		fmt.Println("Config file created at", confpath)
+		os.Exit(0)
+	})
+
+	// Handle start command
 	a.Command("start").Handle(func(opts interface{}) {
 		args := opts.(*Start)
 
@@ -117,9 +143,20 @@ func main() {
 		}()
 	}
 
+	// The actual application starts here
 	fmt.Println("Starting shared clipboard")
 
+	// Load config file
+	confpath := path.Join(getHomeDir(), ".shared-clipboard.conf")
+	// Check if file exists
+	if _, err := os.Stat(confpath); os.IsNotExist(err) {
+		confpath = ""
+	}
 	if conf.Conf != "" {
+		confpath = conf.Conf
+	}
+
+	if confpath != "" {
 		f, err := os.Open(conf.Conf)
 		if err != nil {
 			printAndExit(err)
@@ -138,12 +175,8 @@ func main() {
 		}
 	}
 
+	// Start the application
 	start(conf.Network)
-}
-
-func printAndExit(err error) {
-	fmt.Println(err)
-	os.Exit(1)
 }
 
 func start(network string) {
@@ -163,4 +196,17 @@ func start(network string) {
 	peer.Listen()
 
 	sharedclipboard.Listen(peer, hotkeys)
+}
+
+func printAndExit(err error) {
+	fmt.Println(err)
+	os.Exit(1)
+}
+
+func getHomeDir() string {
+	home := os.Getenv("HOME")
+	if home == "" {
+		home = os.Getenv("USERPROFILE")
+	}
+	return home
 }
