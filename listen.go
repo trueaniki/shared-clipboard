@@ -9,16 +9,16 @@ import (
 )
 
 func listen(peer *gopeers.Peer, hk *Hotkeys) func() {
-	hkDump := hk.HKDump
-	hkLoad := hk.HKLoad
+	hkShare := hk.HKShare
+	hkAdopt := hk.HKAdopt
 
 	return func() {
-		err := hkDump.Register()
+		err := hkShare.Register()
 		if err != nil {
 			panic(err)
 		}
 
-		err = hkLoad.Register()
+		err = hkAdopt.Register()
 		if err != nil {
 			panic(err)
 		}
@@ -32,11 +32,11 @@ func listen(peer *gopeers.Peer, hk *Hotkeys) func() {
 
 		for {
 			select {
-			case <-hkDump.Keydown():
-				log.Printf("hotkey: %v is down\n", hkDump)
+			case <-hkShare.Keydown():
+				log.Printf("hotkey: %v is down\n", hkShare)
 				peer.WriteChan <- clipboard.Read(clipboard.FmtText)
-			case <-hkLoad.Keydown():
-				log.Printf("hotkey: %v is down\n", hkLoad)
+			case <-hkAdopt.Keydown():
+				log.Printf("hotkey: %v is down\n", hkAdopt)
 				if dump != nil {
 					clipboard.Write(clipboard.FmtText, dump)
 				}

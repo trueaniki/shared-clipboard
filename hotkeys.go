@@ -9,8 +9,8 @@ import (
 )
 
 type Hotkeys struct {
-	HKDump *hotkey.Hotkey
-	HKLoad *hotkey.Hotkey
+	HKShare *hotkey.Hotkey
+	HKAdopt *hotkey.Hotkey
 }
 
 func ParseHotkeys(definition string) (*Hotkeys, error) {
@@ -25,27 +25,27 @@ func ParseHotkeys(definition string) (*Hotkeys, error) {
 		}
 		if strings.HasPrefix(strings.ToLower(strings.Trim(def, " ")), "HKDump") {
 			hks := strings.Split(def, "=")[1]
-			hkdump, err := parsehotkeys.Parse(hks, "+")
+			hkshare, err := parsehotkeys.Parse(hks, "+")
 			if err != nil {
 				return nil, err
 			}
-			hk.HKDump = hkdump
+			hk.HKShare = hkshare
 		}
 		if strings.HasPrefix(strings.ToLower(strings.Trim(def, " ")), "HKLoad") {
 			hks := strings.Split(def, "=")[1]
-			hkload, err := parsehotkeys.Parse(hks, "+")
+			hkadopt, err := parsehotkeys.Parse(hks, "+")
 			if err != nil {
 				return nil, err
 			}
-			hk.HKLoad = hkload
+			hk.HKAdopt = hkadopt
 		}
 	}
 
-	if hk.HKDump == nil {
-		return nil, errors.New("HKDump not found")
+	if hk.HKShare == nil {
+		return nil, errors.New("Hotkey Share not found")
 	}
-	if hk.HKLoad == nil {
-		return nil, errors.New("HKLoad not found")
+	if hk.HKAdopt == nil {
+		return nil, errors.New("Hotkey Adopt not found")
 	}
 
 	return hk, nil

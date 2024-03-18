@@ -41,8 +41,8 @@ type Stop struct {
 const daemonPort = 17893
 
 var hotkeys *sharedclipboard.Hotkeys = &sharedclipboard.Hotkeys{
-	HKDump: hotkey.New([]hotkey.Modifier{hotkey.ModCtrl, hotkey.ModShift}, hotkey.KeyA),
-	HKLoad: hotkey.New([]hotkey.Modifier{hotkey.ModCtrl, hotkey.ModShift}, hotkey.KeyD),
+	HKShare: hotkey.New([]hotkey.Modifier{hotkey.ModCtrl, hotkey.ModShift}, hotkey.KeyA),
+	HKAdopt: hotkey.New([]hotkey.Modifier{hotkey.ModCtrl, hotkey.ModShift}, hotkey.KeyD),
 }
 
 func main() {
