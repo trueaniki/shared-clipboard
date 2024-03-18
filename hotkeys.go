@@ -23,7 +23,7 @@ func ParseHotkeys(definition string) (*Hotkeys, error) {
 		if strings.HasPrefix(def, "#") {
 			continue
 		}
-		if strings.HasPrefix(strings.ToLower(strings.Trim(def, " ")), "HKDump") {
+		if strings.HasPrefix(strings.ToLower(strings.Trim(def, " ")), "share") {
 			hks := strings.Split(def, "=")[1]
 			hkshare, err := parsehotkeys.Parse(hks, "+")
 			if err != nil {
@@ -31,7 +31,7 @@ func ParseHotkeys(definition string) (*Hotkeys, error) {
 			}
 			hk.HKShare = hkshare
 		}
-		if strings.HasPrefix(strings.ToLower(strings.Trim(def, " ")), "HKLoad") {
+		if strings.HasPrefix(strings.ToLower(strings.Trim(def, " ")), "adopt") {
 			hks := strings.Split(def, "=")[1]
 			hkadopt, err := parsehotkeys.Parse(hks, "+")
 			if err != nil {
@@ -42,10 +42,10 @@ func ParseHotkeys(definition string) (*Hotkeys, error) {
 	}
 
 	if hk.HKShare == nil {
-		return nil, errors.New("Hotkey Share not found")
+		return nil, errors.New("hotkey 'Share' not found")
 	}
 	if hk.HKAdopt == nil {
-		return nil, errors.New("Hotkey Adopt not found")
+		return nil, errors.New("hotkey 'Adopt' not found")
 	}
 
 	return hk, nil
