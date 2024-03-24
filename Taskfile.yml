@@ -4,3 +4,14 @@ tasks:
   build:
     cmds:
       - go build -o bin/sharedclipboard cmd/shared-clipboard/main.go
+
+  clean: 
+    cmds:
+      - rm -rf bin
+
+  install:
+    cmds:
+      - task: build
+      - cp bin/sharedclipboard /usr/local/bin/sc
+      - chmod +x /usr/local/bin/sc
+      - task: clean
