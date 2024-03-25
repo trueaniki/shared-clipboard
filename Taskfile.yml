@@ -5,6 +5,18 @@ tasks:
     cmds:
       - go build -o bin/sharedclipboard cmd/shared-clipboard/main.go
 
+  build-linux:
+    cmds:
+      - GOOS=linux GOARCH=amd64 go build -o bin/sharedclipboard cmd/shared-clipboard/main.go
+
+  build-windows:
+    cmds:
+      - GOOS=windows GOARCH=amd64 go build -o bin/sharedclipboard.exe cmd/shared-clipboard/main.go
+
+  build-macos:
+    cmds:
+      - GOOS=darwin GOARCH=amd64 go build -o bin/sharedclipboard cmd/shared-clipboard/main.go
+
   clean: 
     cmds:
       - rm -rf bin
